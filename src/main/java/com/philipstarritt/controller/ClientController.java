@@ -1,6 +1,8 @@
 package com.philipstarritt.controller;
 
 import com.philipstarritt.domain.Client;
+import graphql.GraphQLContext;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,17 +26,15 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 public class ClientController {
 
     @QueryMapping
-    public Client client(@Argument String id,
-                         @ContextValue UUID integrationToken) {
-        /**
-         * MDC context contains MdcInterceptor#VALUE_PROPAGATED.
-         * MDC context does not contain MdcInterceptor#VALUE_NOT_PROPAGATED.
-         */
-        log.info("@QueryMapping(client). MDC {}", MDC.getCopyOfContextMap());
+    public Client client(GraphQLContext context) {
+        log.info("@QueryMapping(client)");
+
+        MDC.put("mdcKey", "mdcValue");
+        context.put("contextKey", "contextValue");
 
         return Client.builder()
-                .id(id)
-                .name("Client name")
+                .id("id")
+                .name("name")
                 .build();
     }
 
@@ -45,10 +45,11 @@ public class ClientController {
                                                   * when used with a @BatchMapping. This is not consistent with @QueryMapping.
                                                   */
                                                  // @ContextValue UUID integrationToken,
-                                                 @ContextValue("integrationToken") UUID integrationToken) {
+                                                 GraphQLContext context) {
         return () -> {
-            // Same issue as above. MdcInterceptor#VALUE_NOT_PROPAGATED is missing.
+            // MDC is not propagated. MDC is not available in context.
             log.info("@BatchMapping(Client#advisorId). MDC {}", MDC.getCopyOfContextMap());
+            log.info("@BatchMapping(Client#advisorId). Context {}", context);
             return clients.stream()
                     .collect(toUnmodifiableMap(
                             identity(),
