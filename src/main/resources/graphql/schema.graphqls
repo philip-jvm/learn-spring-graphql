@@ -1,9 +1,23 @@
+scalar LocalDateTime
+
 type Query {
-    client: Client
+    schedule(coach: Coach!): [FitnessClass!]!
 }
 
-type Client {
+enum Coach {
+    PHILIP
+    PETER
+}
+
+type FitnessClass {
     id: ID!
-    name: String!
-    advisorId: ID!
+    coach: Coach!
+    startsAt: LocalDateTime!
+    endsAt: LocalDateTime!
+    difficulty: Difficulty!
+}
+
+enum Difficulty {
+    BEGINNER
+    ADVANCED
 }

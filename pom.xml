@@ -5,8 +5,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.0.3</version>
+        <relativePath/>
     </parent>
     <groupId>com.philipstarritt</groupId>
     <artifactId>learn-spring-graphql</artifactId>
@@ -15,13 +15,9 @@
     <description>learn-spring-graphql</description>
     <properties>
         <java.version>17</java.version>
-        <context-propagation.version>1.0.0</context-propagation.version>
+        <graphql.datetime.version>6.0.0</graphql.datetime.version>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-graphql</artifactId>
@@ -35,9 +31,9 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>context-propagation</artifactId>
-            <version>${context-propagation.version}</version>
+            <groupId>com.tailrocks.graphql</groupId>
+            <artifactId>graphql-datetime-spring-boot-starter</artifactId>
+            <version>${graphql.datetime.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
