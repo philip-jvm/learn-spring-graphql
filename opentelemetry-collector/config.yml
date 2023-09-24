@@ -1,0 +1,49 @@
+extensions:
+  health_check:
+    # HTTP health endpoint for uptime probes (e.g. liveness)
+    endpoint: ":13133"
+    response_body: {
+      "healthy": "UP",
+      "unhealthy": "DOWN"
+    }
+
+receivers:
+  # The java agent will push the application's metrics to the collector via OTLP
+  otlp:
+    protocols:
+      grpc:
+        endpoint: ":4317"
+      http:
+        endpoint: ":4318"
+        # Propagates HTTP and gRPC headers to the processors
+        include_metadata: true
+
+processors:
+  # Group metrics into batches
+  batch:
+  # Adds a client_id tag to each metric
+  attributes:
+    actions:
+      # Reference HTTP headers with `metadata.` prefix
+      - key: metadata.client_id
+        from_context: "metadata.client_id"
+        action: upsert
+
+exporters:
+  # Transforms the data into prometheus format, which is then available on endpoint for prometheus to scrape.
+  prometheus:
+    endpoint: ":8889"
+  # Log the data to console
+  logging:
+
+service:
+  extensions: [health_check]
+  telemetry:
+    logs:
+      # Set logging level of the opentelemetry collector
+      level: "debug"
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [attributes, batch]
+      exporters: [logging, prometheus]
