@@ -4,10 +4,12 @@ import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.graphql.data.method.annotation.support.AnnotatedControllerConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
+@EnableAspectJAutoProxy
 public class AnnotatedControllerConfigurerConfig {
 
     @Bean
